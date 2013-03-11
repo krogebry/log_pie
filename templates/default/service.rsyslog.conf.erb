@@ -1,0 +1,8 @@
+$ModLoad imfile   # Load the imfile input module
+$InputFileName /mnt/log/chef/client.log
+$InputFileTag chef_client_log:
+$InputFileStateFile /var/spool/rsyslog/chef-client-state
+$InputFileFacility local7
+$InputRunFileMonitor
+local7.* @@<%= @server %>:<%= @port %>
+

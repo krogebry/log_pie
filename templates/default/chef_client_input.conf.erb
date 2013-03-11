@@ -1,0 +1,21 @@
+input {
+  syslog {
+    type => "chef_client_log"
+    port => <%= @port %>
+  }
+}
+
+filter {
+  grok {
+    type => "chef_client_log"
+    pattern => "\[%{DATA:chef_time}\] %{LOGLEVEL:chef_log_lvl}: %{DATA:chef_msg}"
+  }
+}
+
+output {
+  stdout { debug => true debug_format => "json"}
+  elasticsearch { 
+    host => "<%= @es_node %>"
+  }
+}
+

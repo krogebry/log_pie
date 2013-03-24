@@ -1,0 +1,28 @@
+
+input {
+  syslog {
+    type => "<%= @name %>"
+    port => <%= @port %>
+  }
+}
+
+filter {
+<% @filters.each do |name,info| %>
+  <%= name %> {
+    <% info.each do |k,v| %>
+    <%= k %> => <%= (v.class == Chef::Node::ImmutableArray ? "[\"%s\"]" % v.join( "\",\"" ) : "\"%s\"" % v) %>
+    <% end %>
+  }
+<% end %>
+}
+
+output {
+  #stdout { debug => true debug_format => "json"}
+  elasticsearch { 
+    host => "<%= @es_node %>" 
+    <% if(@cluster_name != nil) %>
+    cluster => "<%= @cluster_name%>"
+    <% end %>
+  }
+}
+

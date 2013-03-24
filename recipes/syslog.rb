@@ -9,7 +9,7 @@
 
 begin
   ## Find the ElasticSearch nodes
-  es_node = search( :node, "role:logstash_elasticsearch AND chef_environment:prod AND tags:syslog" ).first
+  es_node = search( :node, "role:logstash_elasticsearch AND chef_environment:prod AND tags:sys-log" ).first
 
   template "/opt/logstash/server/etc/conf.d/syslog.conf" do
   #template "/opt/logstash/server/etc/logstash.conf" do

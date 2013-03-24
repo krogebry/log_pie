@@ -9,10 +9,9 @@
 
 begin
   ## Find the ElasticSearch nodes
-  es_node = search( :node, "role:logstash_elasticsearch AND chef_environment:prod AND tags:chef_client" ).first
+  es_node = search( :node, "role:logstash_elasticsearch AND chef_environment:prod AND tags:chef-log" ).first
 
   template "/opt/logstash/server/etc/conf.d/chef_client.conf" do
-  #template "/opt/logstash/server/etc/logstash.conf" do
     owner "logstash"
     group "logstash"
     source "chef_client_input.conf.erb"

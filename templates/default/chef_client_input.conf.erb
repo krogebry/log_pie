@@ -8,14 +8,27 @@ input {
 filter {
   grok {
     type => "chef_client_log"
-    pattern => "\[%{DATA:chef_time}\] %{LOGLEVEL:chef_log_lvl}: %{DATA:chef_msg}"
+    #pattern => "\[%{DATA:chef_time}\] %{LOGLEVEL:chef_log_lvl}: %{DATA:chef_msg}"
+    pattern => "%{HOSTNAME:chef_hostname}: \[%{DATA:chef_time}\] %{LOGLEVEL:chef_log_lvl}: %{GREEDYDATA:chef_msg}"
+  }
+
+  #mutate {
+    #type => "chef_client_log"
+    #replace => [ "@timestamp", "%{@fields.chef_time}" ]
+  #}
+
+  grep {
+    type => "chef_client_log"
+    tags => [ "_grokparsefailure" ]
+    negate => true
   }
 }
 
 output {
-  stdout { debug => true debug_format => "json"}
+  #stdout { debug => true debug_format => "json"}
   elasticsearch { 
     host => "<%= @es_node %>"
+    cluster => 'fat-log'
   }
 }
 
